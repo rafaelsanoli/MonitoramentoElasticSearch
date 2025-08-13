@@ -1,0 +1,16 @@
+FORMATO POLICY (DEV)
+
+# ILM policy
+curl -X PUT http://localhost:9200/_ilm/policy/logs-postgresql-policy \
+  -H 'Content-Type: application/json' \
+  -d @config/ilm/policy-logs-postgresql.json
+
+# index template (data stream)
+curl -X POST http://localhost:9200/_index_template \
+  -H 'Content-Type: application/json' \
+  -d @config/ilm/template-logs-postgresql.json
+
+# ingest pipeline
+curl -X PUT http://localhost:9200/_ingest/pipeline/pipeline-postgresql \
+  -H 'Content-Type: application/json' \
+  -d @config/ingest/pipeline-postgresql.json

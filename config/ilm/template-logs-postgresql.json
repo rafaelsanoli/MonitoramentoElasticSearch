@@ -1,0 +1,49 @@
+{
+  "index_templates": [
+    {
+      "name": "logs-postgresql-template",
+      "index_template": {
+        "index_patterns": ["logs-postgresql-*"],
+        "data_stream": {},
+        "template": {
+          "settings": {
+            "index.number_of_shards": 1,
+            "index.number_of_replicas": 1,
+            "index.lifecycle.name": "logs-postgresql-policy"
+          },
+          "mappings": {
+            "dynamic_templates": [
+              { "strings": { "match_mapping_type": "string", "mapping": { "type": "keyword", "ignore_above": 256 } } }
+            ],
+            "properties": {
+              "@timestamp": { "type": "date" },
+              "log.level": { "type": "keyword" },
+              "message": { "type": "text" },
+              "fields": {
+                "properties": {
+                  "env": { "type": "keyword" },
+                  "db_cluster": { "type": "keyword" },
+                  "tenant": { "type": "keyword" }
+                }
+              },
+              "postgresql": {
+                "properties": {
+                  "log": {
+                    "properties": {
+                      "database": { "type": "keyword" },
+                      "user": { "type": "keyword" },
+                      "application_name": { "type": "keyword" },
+                      "query": { "type": "text" }
+                    }
+                  }
+                }
+              },
+              "host": { "properties": { "name": { "type": "keyword" } } }
+            }
+          }
+        },
+        "priority": 500
+      }
+    }
+  ]
+}

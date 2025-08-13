@@ -1,0 +1,2 @@
+- pipeline.id: pg-logs
+  path.config: "/usr/share/logstash/pipeline/pipeline-postgresql.conf"

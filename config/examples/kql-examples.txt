@@ -1,0 +1,8 @@
+# por severidade
+log.level : "error"
+
+# por banco/usuário
+postgresql.log.database : "meubanco" and postgresql.log.user : "app_user"
+
+# slow queries (se o log tiver duração na mensagem)
+message : "*duration*" and log.level : ("notice" or "info")

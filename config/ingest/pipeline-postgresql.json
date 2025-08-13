@@ -1,0 +1,14 @@
+{
+  "description": "Ingest pipeline para logs PostgreSQL",
+  "processors": [
+    { "set": { "field": "event.dataset", "value": "postgresql.log" } },
+    { "lowercase": { "field": "log.level", "ignore_failure": true } },
+
+    { "gsub": {
+      "field": "message",
+      "pattern": "(password\\s*=\\s*)\\S+",
+      "replacement": "$1********",
+      "ignore_missing": true
+    }}
+  ]
+}

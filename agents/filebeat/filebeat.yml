@@ -1,0 +1,37 @@
+filebeat.modules:
+  - module: postgresql
+    # também pode habilitar via modules.d/postgresql.yml
+    enabled: true
+    log:
+      enabled: true
+      var.paths: ["/var/log/postgresql/*.log"]  # ajuste por distro
+      input:
+        fields:
+          env: "prod"            # <— personalize por host
+          db_cluster: "clusterA" # <— personalize por host
+          tenant: "clienteX"     # <— personalize por host
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+
+setup.template.enabled: false
+setup.ilm.enabled: true
+setup.ilm.policy_name: "logs-postgresql-policy"
+setup.ilm.rollover_alias: "logs-postgresql"
+setup.ilm.pattern: "{now/d}-000001"
+setup.template.type: "data_stream"
+
+output.elasticsearch:
+  hosts: ["http://SEU_ES:9200"]
+  username: "elastic"
+  password: "changeme"
+  pipeline: "pipeline-postgresql"
+
+# para separar por ambiente, rode filebeats com fields.env diferentes.
+# os documentos irão para o data stream logs-postgresql-<dataset>-default.
+
+
+# agents/filebeat/filebeat.yml (alternativo)
+#output.logstash:
+#  hosts: ["SEU_LOGSTASH:5044"]
